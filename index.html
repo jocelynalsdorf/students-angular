@@ -4,11 +4,13 @@
   <title>Student App</title>
   <script src="lib/angular.js"></script>
   <script src="app.js"></script>
-  <script src="js/StudentsController.js"></script>
+  <script src="controllers/StudentsController.js"></script>
+  <script src="controllers/FieldTripsController.js"></script>
   <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
-<div class="container" ng-controller="StudentsCtrl">
+<div class="container">
+<div ng-controller="StudentsCtrl">
   <div class="row">
     <div class="col-md-12">
     <h4>Search Students</h4>
@@ -25,13 +27,13 @@
       <h2 ng-show="students.length && !filtered.length">No Matches</h2>
         <ul>
           <li ng-repeat="item in filtered = (students | filter:query)">
-          <span ng-click="editing = true" ng-hide="editing">
+          <span ng-click="editing = true" ng-hide="editing" >
             {{item.name}} <a ng-click="deleteStudent(item)">Delete</a>
           </span>
           <span class="form-group" ng-show="editing" ng-submit="editing = false">
             <form class="form-inline" role="form">
               <input type="text" class="form-control input-sm" ng-model="item.name" placeholder="Name" required>
-              <button class="btn btn-default btn-sm" type="submit">Save</button>
+              <button class="btn btn-info btn-sm" type="submit">Save</button>
             </form>
           </span>
           </li>
@@ -47,6 +49,17 @@
       </form>
     </div>
   </div>
-
+  </div>
+  <div class="row permission">
+    <div class="col-md-6" ng-controller="FieldTripsCtrl">
+      <h2>Permission slips</h2>
+      <ul>
+        <li ng-repeat="student in studentsWithPermission">
+          {{student.name}}
+        </li>
+      </ul>
+    </div>
+  </div><!-- end of permission row -->
+</div><!-- end of container -->
 </body>
 </html>
