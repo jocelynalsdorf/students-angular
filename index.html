@@ -6,6 +6,7 @@
   <script src="app.js"></script>
   <script src="controllers/StudentsController.js"></script>
   <script src="controllers/FieldTripsController.js"></script>
+  <script src="services/StudentsFactory.js"></script>
   <link rel="stylesheet" href="css/bootstrap.min.css">
 </head>
 <body>
@@ -28,7 +29,7 @@
         <ul>
           <li ng-repeat="item in filtered = (students | filter:query)">
           <span ng-click="editing = true" ng-hide="editing" >
-            {{item.name}} <a ng-click="deleteStudent(item)">Delete</a>
+            {{item.name}} <a ng-click="StudentsFactory.deleteStudent(item)">Delete</a>
           </span>
           <span class="form-group" ng-show="editing" ng-submit="editing = false">
             <form class="form-inline" role="form">
@@ -41,24 +42,33 @@
       </div>
     <div class="col-md-4">
       <h2>New Student</h2>
-      <form ng-submit="addStudent()" class="form-inline" role="form">
+      <form ng-submit="StudentsFactory.addStudent()" class="form-inline" role="form">
         <div class="form-group">
-          <input type="text" ng-model="studentName" class="form-control" placeholder="Enter Name">
+          <input type="text" ng-model="StudentsFactory.studentName" class="form-control" placeholder="Enter Name">
         </div>
         <button type="submit" class="btn btn-default">Submit</button>
       </form>
-    </div>
+    </div>  
   </div>
   </div>
-  <div class="row permission">
-    <div class="col-md-6" ng-controller="FieldTripsCtrl">
-      <h2>Permission slips</h2>
+  <div class="row permission" ng-controller="FieldTripsCtrl">
+    <div class="col-md-6" ng-show="studentsWithoutPermission.length">
+      <h2>Without Permission slips</h2>
       <ul>
-        <li ng-repeat="student in studentsWithPermission">
-          {{student.name}}
+        <li ng-repeat="student in studentsWithoutPermission = (students | filter: {permissionSlip: false})">
+          {{student.name}} <a ng-click="addStudentWithPermissionSlip(student)">Recieved Permission</a>
         </li>
       </ul>
     </div>
+    <div class="col-md-6" ng-show="studentsWithPermission.length">
+      <h2>With Permission slips</h2>
+      <ul>
+        <li ng-repeat="student in studentsWithPermission = (students | filter:{permissionSlip: true})">
+          {{student.name}}
+        </li>
+      </ul>
+      </div>
+   
   </div><!-- end of permission row -->
 </div><!-- end of container -->
 </body>
